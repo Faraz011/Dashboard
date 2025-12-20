@@ -17,7 +17,14 @@ from services.topic_modeling import analyze_topics
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app) 
+CORS(
+    app,
+    resources={r"/api/*": {"origins": [
+        "https://dashboard-btf7vfyh6-virasat.vercel.app"
+    ]}},
+    supports_credentials=True
+)
+
 
 # Initialize Firebase Admin SDK
 cred_path = os.getenv["FIREBASE_SERVICE_ACCOUNT"]
@@ -41,12 +48,12 @@ else:
 
 # --- API Endpoints ---
 
-@app.route("/api/health", methods=["GET"])
+@app.route("/api/health", methods=["GET","OPTIONS"])
 def health_check():
     return jsonify({"status": "ok"}), 200
 
 # Endpoint to process an uploaded file and chunk it
-@app.route("/api/process-file", methods=["POST"])
+@app.route("/api/process-file", methods=["POST","OPTIONS"])
 def handle_process_file():
     if 'file' not in request.files:
         return jsonify({"error": "No file part"}), 400
@@ -63,10 +70,8 @@ def handle_process_file():
         "chunks": chunks
     }), 200
 
-# Endpoint to generate embeddings for a list of chunked texts
-# In backend/main.py, update the /api/embed-resource endpoint:
 
-@app.route("/api/embed-resource", methods=["POST"])
+@app.route("/api/embed-resource", methods=["POST","OPTIONS"])
 def handle_embed_resource():
     data = request.get_json()
     chunks = data.get("chunks", [])
@@ -100,7 +105,7 @@ def handle_embed_resource():
     }), 200
     
 # Endpoint to generate a single embedding
-@app.route("/api/embed", methods=["POST"])
+@app.route("/api/embed", methods=["POST","OPTIONS"])
 def handle_embed():
     text = request.json.get("text")
     embedding = get_embedding(text)
@@ -109,7 +114,7 @@ def handle_embed():
     return jsonify({"embedding": embedding}), 200
 
 # Main chat endpoint with semantic search
-@app.route("/api/chat", methods=["POST"])
+@app.route("/api/chat", methods=["POST","OPTIONS"])
 def handle_chat():
     data = request.get_json()
     message = data.get("message")
@@ -148,7 +153,7 @@ def handle_chat():
     return jsonify({"response": response_text, "sourceResources": source_names})
 
 # Endpoint for topic modeling
-@app.route("/api/topics", methods=["POST"])
+@app.route("/api/topics", methods=["POST","OPTIONS"])
 def handle_topics():
     texts = request.json.get("texts", [])
     if len(texts) < 2:
@@ -157,7 +162,7 @@ def handle_topics():
     return jsonify({"topics": topics})
 
 # Analytics endpoints
-@app.route("/api/analytics/stats", methods=["GET"])
+@app.route("/api/analytics/stats", methods=["GET","OPTIONS"])
 def get_stats():
     stats = {
         "totalResources": len(list(db.collection('resources').stream())),
@@ -167,7 +172,7 @@ def get_stats():
     }
     return jsonify({"stats": stats})
 
-@app.route("/api/analytics/resource-distribution", methods=["GET"])
+@app.route("/api/analytics/resource-distribution", methods=["GET","OPTIONS"])
 def get_resource_distribution():
     distribution = {}
     resources_ref = db.collection('resources').stream()
