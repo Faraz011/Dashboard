@@ -1,4 +1,4 @@
-# backend/main.py
+
 import os
 import firebase_admin
 from firebase_admin import credentials, firestore
@@ -17,7 +17,7 @@ from services.topic_modeling import analyze_topics
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app) # Allow all origins for development
+CORS(app) 
 
 # Initialize Firebase Admin SDK
 cred_path = os.getenv["FIREBASE_SERVICE_ACCOUNT"]
@@ -176,7 +176,4 @@ def get_resource_distribution():
         distribution[res_type] = distribution.get(res_type, 0) + 1
     return jsonify({"distribution": distribution})
 
-# --- Run Application ---
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+
