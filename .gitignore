@@ -37,7 +37,6 @@ venv/
 .venv/
 env/
 envs/
-dashboard/
 
 # Conda
 anaconda3/
