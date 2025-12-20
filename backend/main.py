@@ -20,8 +20,8 @@ app = Flask(__name__)
 CORS(app) # Allow all origins for development
 
 # Initialize Firebase Admin SDK
-cred_path = os.getenv("FIREBASE_CREDENTIALS_PATH")
-cred = credentials.Certificate(cred_path)
+cred_path = os.getenv["FIREBASE_SERVICE_ACCOUNT"]
+cred = credentials.Certificate(service_account_info)
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
