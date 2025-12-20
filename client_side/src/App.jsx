@@ -7,7 +7,7 @@ import { AuthContext } from "./context/AuthContext";
 
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
-import DashboardLayout from "./components/dashboard/DashboardLayout";
+import DashboardLayout from "./components/dashboard/DashboardLayout.jsx";
 
 import Overview from "./components/pages/dashboard/Overview";
 import Resources from "./components/pages/dashboard/Resources";
