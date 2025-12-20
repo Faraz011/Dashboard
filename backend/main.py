@@ -20,7 +20,7 @@ app = Flask(__name__)
 CORS(
     app,
     resources={r"/api/*": {"origins": [
-        "https://dashboard-btf7vfyh6-virasat.vercel.app"
+        "https://dashboard-theta-opal-48.vercel.app"
     ]}},
     supports_credentials=True
 )
