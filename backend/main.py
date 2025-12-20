@@ -27,7 +27,8 @@ CORS(
 
 
 # Initialize Firebase Admin SDK
-cred_path = os.getenv("FIREBASE_SERVICE_ACCOUNT")
+firebase_json= os.getenv("FIREBASE_SERVICE_ACCOUNT")
+service_account_info = json.loads(firebase_json)
 cred = credentials.Certificate(service_account_info)
 firebase_admin.initialize_app(cred)
 db = firestore.client()
