@@ -1,15 +1,17 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import axios from 'axios';
 
-const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GEMINI_API_KEY);
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
 // Process file via backend (extraction & chunking)
 export const processFile = async (file) => {
   const formData = new FormData();
   formData.append('file', file);
   
-  const response = await axios.post(`${BACKEND_URL}/api/process-file`, formData, {
+  // Ensure the URL is properly formed
+  const apiUrl = `${BACKEND_URL.replace(/\/+$/, '')}/api/process-file`;
+  const response = await axios.post(apiUrl, formData, {
     headers: { 'Content-Type': 'multipart/form-data' }
   });
   
@@ -22,7 +24,8 @@ export const processFile = async (file) => {
 
 // Generate embeddings for resource chunks
 export const embedResource = async (resourceText, chunks) => {
-  const response = await axios.post(`${BACKEND_URL}/api/embed-resource`, {
+  const apiUrl = `${BACKEND_URL.replace(/\/+$/, '')}/api/embed-resource`;
+  const response = await axios.post(apiUrl, {
     text: resourceText,
     chunks
   });
@@ -31,8 +34,8 @@ export const embedResource = async (resourceText, chunks) => {
 
 // Chat with AI using context
 export const chatWithAI = async (message) => {
-  // The backend handles semantic search and context injection
-  const response = await axios.post(`${BACKEND_URL}/api/chat`, {
+  const apiUrl = `${BACKEND_URL.replace(/\/+$/, '')}/api/chat`;
+  const response = await axios.post(apiUrl, {
     message,
     userId: auth.currentUser?.uid
   });
