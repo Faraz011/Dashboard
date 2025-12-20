@@ -26,5 +26,6 @@ numpy==1.24.3
 pandas==2.0.2
 scikit-learn==1.2.2
 sentence-transformers==2.2.2
+huggingface-hub==0.16.4
 bertopic==0.15.0
 transformers==4.30.2
