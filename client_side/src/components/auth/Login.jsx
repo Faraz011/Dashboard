@@ -27,7 +27,7 @@ export default function Login() {
   return (
     <div className="min-h-full bg-slate-50 flex items-center justify-center px-4 py-10">
       <Card className="w-full max-w-md">
-        <div className="text-2xl font-bold text-slate-900">AI Team Dashboard</div>
+        <div className="text-2xl font-bold text-slate-900">Team Dashboard</div>
         <div className="mt-1 text-sm text-slate-500">Login to continue</div>
 
         <form className="mt-6 space-y-4" onSubmit={onSubmit}>

@@ -33,7 +33,7 @@ export default function Dashboard() {
   return (
     <div className="dashboard">
       <aside className="sidebar">
-        <div className="sidebar-header">AI Team Dashboard</div>
+        <div className="sidebar-header">Team Dashboard</div>
         <nav className="sidebar-nav">
           {['overview', 'resources', 'models', 'ideas', 'chat', 'analytics'].map(tab => (
             <button 
