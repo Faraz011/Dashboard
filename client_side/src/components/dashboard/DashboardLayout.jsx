@@ -4,17 +4,19 @@ import { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import { useAuth } from "../../hooks/useAuth";
-import { Menu } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 export default function DashboardLayout() {
   const { user } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-      if (window.innerWidth >= 768) {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (mobile) {
         setIsSidebarOpen(false);
       }
     };
@@ -25,23 +27,41 @@ export default function DashboardLayout() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
-      <Topbar user={user} onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} />
+      <Topbar 
+        user={user} 
+        onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        isSidebarOpen={isSidebarOpen}
+      />
       <div className="flex flex-1 overflow-hidden">
         {/* Mobile Sidebar Overlay */}
         {isMobile && isSidebarOpen && (
           <div 
-            className="fixed inset-0 bg-black/50 z-20 md:hidden"
+            className="fixed inset-0 bg-black/50 z-20 md:hidden transition-opacity duration-300"
             onClick={() => setIsSidebarOpen(false)}
           />
         )}
         
-        <div className={`fixed inset-y-0 left-0 z-30 transform ${isMobile ? (isSidebarOpen ? 'translate-x-0' : '-translate-x-full') : 'translate-x-0'} transition-transform duration-300 ease-in-out md:relative md:translate-x-0`}>
-          <Sidebar onNavigate={() => isMobile && setIsSidebarOpen(false)} />
+        {/* Sidebar */}
+        <div className={`
+          ${isMobile ? 'fixed' : 'relative'} 
+          inset-y-0 left-0 z-30 
+          transform transition-all duration-300 ease-in-out
+          ${isMobile ? (isSidebarOpen ? 'translate-x-0' : '-translate-x-full') : 'translate-x-0'}
+          ${!isMobile && sidebarCollapsed ? 'w-20' : 'w-64'}
+        `}>
+          <Sidebar 
+            onNavigate={() => isMobile && setIsSidebarOpen(false)}
+            collapsed={!isMobile && sidebarCollapsed}
+            onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+          />
         </div>
         
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 w-full">
-          <div className="max-w-7xl mx-auto w-full">
-            <Outlet />
+        {/* Main Content */}
+        <main className="flex-1 overflow-y-auto">
+          <div className="p-4 md:p-6 lg:p-8">
+            <div className="max-w-7xl mx-auto">
+              <Outlet />
+            </div>
           </div>
         </main>
       </div>
