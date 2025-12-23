@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Card from "../../ui/Card";
 import Button from "../../ui/Button";
+import Modal from "../../ui/Modal";
 import { api } from "../../../services/api";
 import { createResource, listResources, removeResource } from "../../../services/firestore";
 import { useAuth } from "../../../hooks/useAuth";
@@ -10,6 +11,7 @@ export default function Resources() {
   const { user } = useAuth();
   const [items, setItems] = useState([]);
   const [busy, setBusy] = useState(false);
+  const [selectedResource, setSelectedResource] = useState(null);
 
   async function refresh() {
     const data = await listResources();
@@ -58,6 +60,10 @@ export default function Resources() {
     }
   }
 
+  function viewResource(resource) {
+    setSelectedResource(resource);
+  }
+
   async function onDelete(id) {
     if (!window.confirm("Delete this resource?")) return;
     await removeResource(id);
@@ -91,7 +97,10 @@ export default function Resources() {
                 </div>
                 <div className="mt-2 text-xs text-slate-600">Uploaded by: {r.uploadedBy}</div>
               </div>
-              <Button variant="danger" onClick={() => onDelete(r.id)}>Delete</Button>
+              <div className="flex gap-2">
+                <Button variant="secondary" onClick={() => viewResource(r)}>View Content</Button>
+                <Button variant="danger" onClick={() => onDelete(r.id)}>Delete</Button>
+              </div>
             </div>
           </Card>
         ))}
@@ -100,6 +109,34 @@ export default function Resources() {
       {items.length === 0 && (
         <div className="mt-8 text-center text-sm text-slate-500">No resources yet. Upload your first file.</div>
       )}
+
+      <Modal
+        isOpen={!!selectedResource}
+        onClose={() => setSelectedResource(null)}
+        title={selectedResource?.name || 'Resource Content'}
+      >
+        {selectedResource && (
+          <div className="mt-4 p-4 bg-slate-50 rounded-lg max-h-96 overflow-y-auto">
+            <div className="text-sm text-slate-600 mb-2">
+              <span className="font-medium">Type:</span> {selectedResource.type || 'unknown'}
+              <span className="mx-2">•</span>
+              <span className="font-medium">Size:</span> {formatFileSize(selectedResource.size || 0)}
+            </div>
+            <div className="whitespace-pre-wrap font-mono text-sm bg-white p-4 rounded border border-slate-200">
+              {selectedResource.text || 'No content available'}
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
+}
+
+// Helper function to format file size
+function formatFileSize(bytes) {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }

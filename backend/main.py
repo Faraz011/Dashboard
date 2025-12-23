@@ -22,7 +22,8 @@ CORS(
     app,
     resources={r"/api/*": {"origins": [
         "https://dashboard-theta-opal-48.vercel.app",
-        "https://dashboard-btf7vfyh6-virasat.vercel.app"
+        "https://dashboard-btf7vfyh6-virasat.vercel.app",
+        "http://localhost:5173"
     ]}},
     supports_credentials=True
 )
@@ -55,7 +56,8 @@ else:
 @cross_origin(
     origins=[
         "https://dashboard-theta-opal-48.vercel.app",
-        "https://dashboard-btf7vfyh6-virasat.vercel.app"
+        "https://dashboard-btf7vfyh6-virasat.vercel.app",
+        "http://localhost:5173"
     ],
     supports_credentials=True
 )
@@ -69,7 +71,8 @@ def health_check():
 @cross_origin(
     origins=[
         "https://dashboard-theta-opal-48.vercel.app",
-        "https://dashboard-btf7vfyh6-virasat.vercel.app"
+        "https://dashboard-btf7vfyh6-virasat.vercel.app",
+        "http://localhost:5173"
     ],
     supports_credentials=True
 )
@@ -97,7 +100,8 @@ def handle_process_file():
 @cross_origin(
     origins=[
         "https://dashboard-theta-opal-48.vercel.app",
-        "https://dashboard-btf7vfyh6-virasat.vercel.app"
+        "https://dashboard-btf7vfyh6-virasat.vercel.app",
+        "http://localhost:5173"
     ],
     supports_credentials=True
 )
@@ -141,7 +145,8 @@ def handle_embed_resource():
 @cross_origin(
     origins=[
         "https://dashboard-theta-opal-48.vercel.app",
-        "https://dashboard-btf7vfyh6-virasat.vercel.app"
+        "https://dashboard-btf7vfyh6-virasat.vercel.app",
+        "http://localhost:5173"
     ],
     supports_credentials=True
 )
@@ -160,7 +165,8 @@ def handle_embed():
 @cross_origin(
     origins=[
         "https://dashboard-theta-opal-48.vercel.app",
-        "https://dashboard-btf7vfyh6-virasat.vercel.app"
+        "https://dashboard-btf7vfyh6-virasat.vercel.app",
+        "http://localhost:5173"
     ],
     supports_credentials=True
 )
@@ -209,7 +215,8 @@ def handle_chat():
 @cross_origin(
     origins=[
         "https://dashboard-theta-opal-48.vercel.app",
-        "https://dashboard-btf7vfyh6-virasat.vercel.app"
+        "https://dashboard-btf7vfyh6-virasat.vercel.app",
+        "http://localhost:5173"
     ],
     supports_credentials=True
 )
@@ -228,7 +235,8 @@ def handle_topics():
 @cross_origin(
     origins=[
         "https://dashboard-theta-opal-48.vercel.app",
-        "https://dashboard-btf7vfyh6-virasat.vercel.app"
+        "https://dashboard-btf7vfyh6-virasat.vercel.app",
+        "http://localhost:5173"
     ],
     supports_credentials=True
 )
@@ -248,7 +256,8 @@ def get_stats():
 @cross_origin(
     origins=[
         "https://dashboard-theta-opal-48.vercel.app",
-        "https://dashboard-btf7vfyh6-virasat.vercel.app"
+        "https://dashboard-btf7vfyh6-virasat.vercel.app",   
+        "http://localhost:5173"
     ],
     supports_credentials=True
 )
@@ -262,3 +271,5 @@ def get_resource_distribution():
         res_type = doc.to_dict().get('type', 'other')
         distribution[res_type] = distribution.get(res_type, 0) + 1
     return jsonify({"distribution": distribution})
+
+
